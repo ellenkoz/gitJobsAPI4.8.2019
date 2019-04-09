@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+ 
+  <title>Jobs Listing</title>
+
+ <a href="http://href="https://fonts.googleapis.com/css?family=Dosis:400,700" rel="stylesheet""></a>
+
+  <style>
+ /* SEARCH BAR STYLING HERE */
+    @import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+    body{
+      background: #f2f2f2;
+      font-family: 'Open Sans', sans-serif;
+     }
+body:not(.home) #page .custom-header {
+  display: none;
+}
+    .search {
+      width: 100%;
+      position: relative
+      }
+
+    .searchTerm {
+      float: left;
+      width: 92%;
+      border: 3px solid  #7D317B;
+      padding: 5px;
+      height: 40px;
+      border-radius: 5px;
+      outline: none;
+      color: #9DBFAF;
+      }
+
+    .searchTerm:focus{
+      color: #00B4CC;
+      }
+
+    .searchButton {
+      position: relative;  
+      right: -25px;
+      width: 100px;
+      height: 36px;
+      border: 1px solid  #7D317B;
+      background:  #7D317B;
+      text-align: center;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 20px;
+      }
+
+    /*change search bar dimensions here*/
+    .wrap{
+      position: relative;
+      left: 50%;
+      top: 50px;
+      transform: translate(-50%, -50%);
+      width: 50%; 
+        
+    }
+    .fa fa search {
+        display: inline-flex;
+      }
+     
+   /* STYLING FOR JS CARD LAYOUT */ 
+    
+    * {
+      box-sizing: border-box
+    }
+
+    html {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-family: 'Dosis', sans-serif;
+      line-height: 1.6;
+      color: #696969;
+      background: white;
+    }
+
+    #root {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      padding: 1.5rem 2.5rem;
+      background-color: #b0bac6;
+      margin: 0 0 2rem 0;
+      font-size: 1.5rem;
+      color: #696969;
+      }
+
+    h3, h4 {
+      text-align: left;  
+      position: relative;
+      line-height: .5;
+      top: 10px;
+      left: 43px;     
+      }
+
+    p {
+      padding: 0 2.5rem 2.5rem;
+      margin: 0;
+      }
+
+    .container1{
+      display: flex;
+      flex-wrap: wrap;
+     }
+
+    .card {
+      margin: 1rem;
+      background: #bobac6;
+      box-shadow: 2px 4px 25px rgba(0, 0, 0, .1);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all .2s linear;
+      }
+
+    .card:hover {
+      box-shadow: 2px 8px 45px rgba(0, 0, 0, .15);
+      transform: translate3D(0, -2px, 0);
+     }
+
+    @media screen and (min-width: 600px) {
+      .card {
+        flex: 1 1 calc(50% - 2rem);
+       }
+     }
+
+    @media screen and (min-width: 900px) {
+      .card {
+        flex: 1 1 calc(33% - 2rem);
+       }
+     }
+
+    .card:nth-child(2n) h1 {
+      background-color: #b0bac6;
+      color: #696969;
+     }
+
+    .card:nth-child(4n) h1 {
+      background-color: #b0bac6;
+      color: #696969;
+     }
+
+    .card:nth-child(5n) h1 {
+      background-color #b0bac6;
+      color: #696969;
+      }
+
+    .container2 {
+       padding: 20px;
+       width: 90%;
+       max-width: 400px;
+       margin: 0 auto;
+      }
+
+    label {
+       display: block;
+       line-height: 1.5em;
+     }
+
+    ul {
+       margin-left: 0;
+       padding-left: 0;
+       list-style: none;
+      }
+
+    li {
+       padding: 8px 16px;
+       border-bottom: 1px solid #eee;
+      }
+
+/* FILTER BY JOB TYPE */
+
+.checkbox {
+    position: relative;
+    text-align: center;
+}
+
+  </style>
+  
+</head>
+
+<body>
+    <!-- Search bar -->
+  
+  <div class="wrap">
+    <div class="search"><br><br><br><br><br>
+      <input id ="userInput1" type="text" class="searchTerm" placeholder="Keywords, Title, Career"/>
+      <button type="submit" class="searchButton" id="keywordSearchButton">
+           <i class="fa fa-search"></i>Search
+      </button><br>
+    </div>
+  
+    <div class="search"><br>
+      <input id ="userInput2" type="text" class="searchTerm" placeholder="Location"/>
+      <button type="submit" class="searchButton" id="locationSearchButton">
+           <i class="fa fa-search"></i>Search
+      </button>
+    </div>
+  </div><br><br><br><br>  
+                                  
+                                  
+   <!-- CHECKBOXES FOR JOB TYPE -->
+    <div> 
+      <h5>Advanced Filters:</h5>                        
+      <input type="checkbox" id= "cbFT" class= "checkbox" value="Full Time Jobs" data-bind="checked: filters" checked/>Full Time Jobs<br/>
+      <input type="checkbox" id= "cbPT" class= "checkbox"  value="Part Time Jobs" data-bind="checked: filters" checked/>Part Time Jobs<br/>
+      <input type="checkbox" id= "cbCT" class= "checkbox"  value="Contract Jobs" data-bind="checked: filters" checked>Contract Jobs
+      
+    </div> 
+  <div id="root"></div>
+                                                                                     
+      <script>
+        
+       // USED STRICT MODE TO SOLVE: “UNCAUGHT SYNTAX ERROR: UNEXPECTED TOKEN U IN JSON @ POSITION 0”
+'use strict';
+
+var apiData="";
+const app = document.getElementById('root');
+const container1 = document.createElement('div');
+container1.setAttribute('class', 'container1');
+app.appendChild(container1);
+var request = new XMLHttpRequest();
+
+//GET REQUEST WITH USE OF HEROKU AS A PROXY TO SOLVE CORS ERROR
+request.open('GET','https://cors-anywhere.herokuapp.com/https://jobs.github.com/positions.json?&markdown=true&location=united+states&page=1&count=20', 
+true);
+
+request.onload = function () {  
+// CONVERT JSON DATA TO JAVASCRIPT OBJECTS USING JSON.PARSE
+    var apiData = JSON.parse(this.response);
+    if (request.status >= 200 && request.status < 400) {
+        apiData.forEach(job => {
+        const card = document.createElement('div');
+        card.setAttribute('class', 'card');
+
+      // render relevant data: job title, job type, location and description      
+        const h1 = document.createElement('h1');
+        h1.textContent = job.title.substring(0, 50);
+     
+            
+        const h3 = document.createElement('h3');
+        h3.textContent = job.type;
+            
+        const h4 = document.createElement('h4');
+        h4.textContent = job.location;   
+            
+        const p = document.createElement('p');
+        job.description = job.description.substring(0, 300);
+        p.textContent = `${job.description}...`;
+            
+        container1.appendChild(card);
+        
+        card.appendChild(h1);
+        card.appendChild(h3);    
+        card.appendChild(h4);      
+        card.appendChild(p);
+            
+        });
+
+  // ERROR HANDLING
+    } else {
+        const errorMessage = document.createElement('marquee');
+        errorMessage.textContent = `It's not working!`;
+        app.appendChild(errorMessage);
+    }
+}
+
+
+// FILTER BY JOB TITLE
+var button1 = document.getElementById("keywordSearchButton");
+var userInput1 = document.getElementById("userInput1");
+button1.addEventListener('click', showResults1);
+userInput1.addEventListener("keyup", function(e){
+  if (e.keyCode === 13){
+    showResults();
+  }
+})
+
+function showResults1(){
+  var searchKeyword = userInput1.value.toLowerCase();
+  var cards = document.getElementsByClassName("card"); //this is an array
+  var regex = new RegExp(searchKeyword, "g");
+
+  for (var i=0; i<cards.length ; i++){
+    if (cards[i].textContent.toLowerCase().match(regex)){
+      cards[i].style.display = "block";
+    } else{
+      cards[i].style.display= "none";
+    }
+  }
+}
+
+// FILTER BY JOB LOCATION
+var button2 = document.getElementById("locationSearchButton");
+var userInput2 = document.getElementById("userInput2");
+button2.addEventListener('click', showResults2);
+userInput2.addEventListener("keyup", function(e){
+  if (e.keyCode === 13){
+    showResults();
+  }
+})
+
+function showResults2(){
+  var searchKeyword = userInput2.value.toLowerCase();
+  var cards = document.getElementsByClassName("card");
+  var jobLocations = document.getElementsByTagName("h4");
+  var regex = new RegExp(searchKeyword, "g");
+
+  for (var i=0; i<cards.length ; i++){
+    if (jobLocations[i].textContent.toLowerCase().match(regex)){
+      cards[i].style.display = "block";
+    } else{
+      cards[i].style.display= "none";
+    }
+  }
+}
+
+// FILTER BY JOB TYPE 
+var fullTimeCheckBox = document.getElementById("cbFT");
+var partTimeCheckBox = document.getElementById("cbPT");
+var contractCheckBox = document.getElementById("cbCT");
+var jobType = document.getElementsByTagName("h3");
+
+fullTimeCheckBox.addEventListener("change", showByJobType);
+partTimeCheckBox.addEventListener("change", showByJobType);
+contractCheckBox.addEventListener("change", showByJobType);
+
+function showByJobType(){
+  var cards = document.getElementsByClassName("card");
+  for (var i=0; i<cards.length ; i++){
+    if (fullTimeCheckBox.checked === false){
+      if (jobType[i].textContent.toLowerCase() == "full time"){
+        cards[i].style.display = "none";
+      }
+    } else if (fullTimeCheckBox.checked){
+      if (jobType[i].textContent.toLowerCase() == "full time"){
+        cards[i].style.display = "block";
+      }
+    }
+    if (partTimeCheckBox.checked === false){
+      if (jobType[i].textContent.toLowerCase() == "part time"){
+        cards[i].style.display = "none";
+      }
+    }else if (partTimeCheckBox.checked){
+      if (jobType[i].textContent.toLowerCase() == "part time"){
+        cards[i].style.display = "block";
+      }
+    }
+    if (contractCheckBox.checked === false){
+      if (jobType[i].textContent.toLowerCase() == "contract"){
+        cards[i].style.display = "none";
+      }
+    }else if (contractCheckBox.checked){
+      if (jobType[i].textContent.toLowerCase() == "contract"){
+        cards[i].style.display = "block";
+      }
+    }
+  }
+}
+
+		request.send(); 
+        
+               
+       </script>
+   </body>
+</html>
